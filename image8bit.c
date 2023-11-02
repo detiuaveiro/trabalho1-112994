@@ -171,7 +171,26 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   assert (width >= 0);
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
-  // Insert your code here!
+  
+  Image newImage=malloc(sizeof(image));
+  if(newImage == NULL){
+    errCause = "Failure in memory allocation";
+    return NULL;
+  }
+  newImage->width = width;
+  newImage->height = height;
+  newImage->maxval = maxval;
+  newImage->pixel = malloc(sizeof(uint8)* width * height);
+  if(newImage->pixel == NULL){
+    errCause = "Failure in memory allocation";
+    free(newImage);
+    return NULL;
+  }
+  for(int i = 0; i<width*height; i++){
+    newImage-pixel[i]=0;
+  }
+  
+return newImage;
 }
 
 /// Destroy the image pointed to by (*imgp).
