@@ -181,7 +181,9 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 /// Should never fail, and should preserve global errno/errCause.
 void ImageDestroy(Image* imgp) { ///
   assert (imgp != NULL);
-  // Insert your code here!
+  imgp->witdh = 0;
+  imgp->height = 0;
+  imgp->maxval = 0;
 }
 
 
