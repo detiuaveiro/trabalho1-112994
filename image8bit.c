@@ -200,9 +200,9 @@ return newImage;
 /// Should never fail, and should preserve global errno/errCause.
 void ImageDestroy(Image* imgp) { ///
   assert (imgp != NULL);
-  imgp->witdh = 0;
-  imgp->height = 0;
-  imgp->maxval = 0;
+  free((*imgp)->pixel);
+  free(*imgp);
+  *imgp = NULL;
 }
 
 
