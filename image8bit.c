@@ -314,7 +314,17 @@ int ImageMaxval(Image img) { ///
 /// *max is set to the maximum.
 void ImageStats(Image img, uint8* min, uint8* max) { ///
   assert (img != NULL);
-  // Insert your code here!
+  size_t pixels = ImageHeight(img) * ImageWidth(img);
+  uint8 tmin = pixels->pixel[0];
+  uint8 tmax = pixels->pixel[0];
+  for(size_t i = 1; i < pixels; i++){
+    if(tmin > pixels->pixel[i]){
+      tmin = pixels->pixel[i];
+    }
+    if(tmax < pixels->pixel[i]){
+      tmax = pixels->pixel[i];
+    }
+  }
 }
 
 /// Check if pixel position (x,y) is inside img.
@@ -381,7 +391,11 @@ void ImageSetPixel(Image img, int x, int y, uint8 level) { ///
 /// resulting in a "photographic negative" effect.
 void ImageNegative(Image img) { ///
   assert (img != NULL);
-  // Insert your code here!
+  size_t maxval = ImageMaxval(img);
+  size_t pixels = ImageHeight(img) * ImageWidth(img);
+  for(size_t i = 0; i < pixels; i++){
+    pixels->pixel[i] = maxval - pixels->pixel[i];
+  }
 }
 
 /// Apply threshold to image.
@@ -389,7 +403,12 @@ void ImageNegative(Image img) { ///
 /// all pixels with level>=thr to white (maxval).
 void ImageThreshold(Image img, uint8 thr) { ///
   assert (img != NULL);
-  // Insert your code here!
+  size_t pixels = ImageHeight(img) * ImageWidth(img);
+  for(size_t i = 0; i < pixels; i++){
+    if(pixels->pixel[i]<thr){
+      pixels->pixel[i] = 0;
+    }
+  }
 }
 
 /// Brighten image by a factor.
@@ -398,8 +417,10 @@ void ImageThreshold(Image img, uint8 thr) { ///
 /// darken the image if factor<1.0.
 void ImageBrighten(Image img, double factor) { ///
   assert (img != NULL);
-  // ? assert (factor >= 0.0);
-  // Insert your code here!
+  size_t pixels = ImageHeight(img) * ImageWidth(img);
+  for(size_t i = 0; i < pixels; i++){
+    pixels->pixel[i] = pixels->pixel[i]*factor;
+  }
 }
 
 
