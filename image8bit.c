@@ -413,9 +413,12 @@ void ImageThreshold(Image img, uint8 thr) { ///
 /// darken the image if factor<1.0.
 void ImageBrighten(Image img, double factor) { ///
   assert (img != NULL);
+  size_t maval = ImageMaxval(img);
   size_t pixels = ImageHeight(img) * ImageWidth(img);
-  for(size_t i = 0; i < pixels; i++){
-    pixels->pixel[i] = pixels->pixel[i]*factor;
+  for(size_t i = 0; i < pixels; i++){ 
+    if (pixels->pixel[i] * factor <= maval){
+    pixels->pixel[i] = pixels->pixel[i] * factor;}
+    else{pixels->pixel[i] = maval;}
   }
 }
 
