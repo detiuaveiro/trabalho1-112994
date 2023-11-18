@@ -490,7 +490,20 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
-  // Insert your code here!
+  int start = img1->width * (img1->height - img2->height)+x;
+  size_t img2size = img2->width * img2->height;
+  size_t pixelC = 0;
+  while(pixelC < img2size){
+    for(size_t i = start-1; i < (img1->width * img2->height); i++){
+      img1->pixel[i]=img->pixel[pixelC];
+      pixelC++;
+      if(pixelC%img2->width == 0){
+        if(img1->width * img1->height-1 <= i+(img1->width - img2->width - x)){break;}
+        else{
+        i = i+(img1->width - img2->width);}
+      }
+    }
+  }
 }
 
 /// Blend an image into a larger image.
