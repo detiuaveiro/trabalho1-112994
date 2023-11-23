@@ -495,7 +495,13 @@ Image ImageMirror(Image img) { ///
 Image ImageCrop(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
   assert (ImageValidRect(img, x, y, w, h));
-  // Insert your code here!
+  Image newimage = ImageCreate(w, h, ImageMaxval(img));
+  for(size_t z = 0; z<h; z++){
+    for(size_t a = 0; a < w; h++){
+      ImageSetPixel(newimage,a,z,ImageGetPixel(img, x+a, y+z));
+    }
+  }
+  return newimage;
 }
 
 
@@ -509,9 +515,9 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
-  for(size_t z = 0; z<img2->width; z++){
-    for(size_t a = 0; a < img2->height; a++){
-      ImageSetPixel(img1,x+z,y+a,ImageGetPixel(img2,z,a));
+  for(size_t z = 0; z<img2->height; z++){
+    for(size_t a = 0; a < img2->width; a++){
+      ImageSetPixel(img1,x+a,y+z,ImageGetPixel(img2,a,z));
       }
   }
 }
