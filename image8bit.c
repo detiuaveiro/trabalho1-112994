@@ -599,6 +599,35 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// [x-dx, x+dx]x[y-dy, y+dy].
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) { ///
-  // Insert your code here!
+  Image aux = ImageCreate(img->width, img->height, ImageMaxval(img));
+  for(size_t y = 0;y < img->height; y++ ){
+    for(size_t x = 0; x<img->width;x++){
+      ImageSetPixel(aux,x,y,ImageGetPixel(img1,x,y));
+    }
+  }
+  for(size_t h = 0; h < img->height;h++){
+      int Topsidey = h-dy;
+      if (Topsidey < 0){
+        Topsidey = 0;
+      }
+      int Bottomy = h + dy;
+      if(Bottomy > img->height){
+        Bottomy = img->height;
+      }
+    for(size_t w = 0; w < img-> width; w++){
+      int beforex = w - dx;
+      if(beforex < 0){beforex = 0;} 
+      int afterx = w + dx;
+      if(afterx > img->width){afterx = img->width;}
+      size_t sum = 0;
+      size_t Npixel = (afterx-beforex)*(Topsidey*Bottomy);
+      for(size_t z = Topsidey; z < Bottomy;z++){
+        for(size_t a = beforex; a < afterx; a++){
+          sum += ImageGetPixel(aux, a, z);
+        }
+      }
+      uint8 media = (sum+Npixel/2)/Npixel;
+      ImageSetPixel(img,w,h,media);
+    }
+  }
 }
-
