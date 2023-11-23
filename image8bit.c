@@ -566,7 +566,29 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
-  // Insert your code here!
+  size_t w = img2->width;
+  size_t h = img2->height;
+  size_t size2 = h*w;
+  for(size_t y = 0; y < (img1->height- h); y++ ){
+    for(size_t x = 0; x < (img->width - w); x++){
+      if(ImageGetPixel(img1,x,y) == ImageGetPixel(img2,0,0)){
+        size_t count = 0;
+        for(size_t z = 0; z < h; z++){
+          for(size_t a = 0; a < w; a++){
+            uint8 pixel1 = ImageGetPixel(img2, a,z);
+            uint8 pixel2 = ImageGetPixel(img1, x+a, y+z);
+            if(pixel1 == pixel2){count++;}
+          }
+        }
+        if(count == size2){
+          *px = x;
+          *py = y;
+          return 1;
+        }
+      }
+    }
+  }
+  return 0;
 }
 
 
