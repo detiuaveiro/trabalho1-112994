@@ -446,7 +446,17 @@ void ImageBrighten(Image img, double factor) { ///
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageRotate(Image img) { ///
   assert (img != NULL);
-  // Insert your code here!
+  int width = ImageHeight(img);
+  int height = ImageWidth(img);
+  uint8 maxval = ImageMaxval(img);
+  Image newimage = ImageCreate(width, height, maxval);
+  for(size_t x = 0; x < width; x++){
+    for(size_t y = 0; y < height; y++){
+      ImageSetPixel(newimage, y, width-1-x, ImageGetPixel(img,x,y))
+    }
+  }
+  return newimage;
+
 }
 
 /// Mirror an image = flip left-right.
@@ -458,7 +468,16 @@ Image ImageRotate(Image img) { ///
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageMirror(Image img) { ///
   assert (img != NULL);
-  // Insert your code here!
+  int width = ImageWidth(img);
+  int height = ImageHeight(img);
+  uint8 maxval = ImageMaxval(img);
+  Image newimage = ImageCreate(width, height,maxval);
+  for(int y = 0; y < height; y++){
+    for(int x = 0; x <width; x++){
+      ImageSetPixel(newimage,x ,y, ImageGetPixel(img, width-x-1,y))
+    }
+  }
+  return newimage;
 }
 
 /// Crop a rectangular subimage from img.
@@ -490,19 +509,10 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
-  int start = img1->width * (img1->height - img2->height)+x;
-  size_t img2size = img2->width * img2->height;
-  size_t pixelC = 0;
-  while(pixelC < img2size){
-    for(size_t i = start-1; i < (img1->width * img2->height); i++){
-      img1->pixel[i]=img->pixel[pixelC];
-      pixelC++;
-      if(pixelC%img2->width == 0){
-        if(img1->width * img1->height-1 <= i+(img1->width - img2->width - x)){break;}
-        else{
-        i = i+(img1->width - img2->width);}
+  for(size_t z = 0; z<img2->width; z++){
+    for(size_t a = 0; a < img2->height; a++){
+      ImageSetPixel(img1,x+z,y+a,ImageGetPixel(img2,z,a));
       }
-    }
   }
 }
 
