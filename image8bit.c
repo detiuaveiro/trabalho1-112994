@@ -532,7 +532,15 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
-  // Insert your code here!
+  for(size_t z = 0; z<img2->height; z++){
+    for(size_t a = 0; a < img2->width; a++){
+      uint8 aux = (alpha * ImageGetPixel(img2,a,z) + (1-alpha)* ImageGetPixel(img1, x+a,y+z) + 0.5);
+      if(aux > ImageMaxval(img1)){ImageSetPixel(img1,x+a,y+z,ImageMaxval(img1));}
+      else if(aux < 0){ImageSetPixel(img1,x+a,y+z,0);}
+      else{ ImageSetPixel(img1,x+a,y+z,(uint8)(alpha * ImageGetPixel(img2,a,z) + (1-alpha)* ImageGetPixel(img1, x+a,y+z) + 0.5));} 
+      }
+  }
+    
 }
 
 /// Compare an image to a subimage of a larger image.
@@ -542,9 +550,15 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
   assert (ImageValidPos(img1, x, y));
-  // Insert your code here!
+  for(size_t i = y; i<img2->height; i++){
+    for(size_t t = x; t < img2->width; t++){
+      uint8 pixel1 = ImageGetPixel(img1,t,i);
+      uint8 pixel2 = ImageGetPixel(img2,t,i);
+      if(pixel1 != pixel2){return 0;}
+    }
+  }
+  return 1;
 }
-
 /// Locate a subimage inside another image.
 /// Searches for img2 inside img1.
 /// If a match is found, returns 1 and matching position is set in vars (*px, *py).
