@@ -630,4 +630,5 @@ void ImageBlur(Image img, int dx, int dy) { ///
       ImageSetPixel(img,w,h,media);
     }
   }
+  ImageDestroy(aux);
 }
